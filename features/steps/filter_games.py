@@ -23,6 +23,15 @@ def step_impl(context):
 def step_impl(context, name):
 	context.name = name
 
+#rating
+@given('the user enters the ratings: {ratings}')
+def step_impl(context, ratings):
+	context.ratings = ratings
+
+#Developer
+@given('the user enters the developer: {study}')
+def step_impl(context, study):
+		context.study = study
 
 @when("the user search games by {criteria}")
 def step_impl(context, criteria):
@@ -31,12 +40,19 @@ def step_impl(context, criteria):
 		print(result)
 		context.result = result
 		context.message = message
-
+	elif (criteria == 'study'):
+		result, message = get_game_developer(context.games, context.study)
+		context.result = result
+		context.message = message
+	elif (criteria == 'ratings'):
+		result, message, error = get_game_rating(context.games, context.ratings)
+		context.result = result
+		context.message = message
+		context.error = error
 
 @then("{total} games will match")
 def step_impl(context, total):
 	assert len(context.result) == int(total)
-
 
 @then("the names of these games are")
 def step_impl(context):
